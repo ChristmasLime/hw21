@@ -9,58 +9,53 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.util.Collection;
 import java.util.List;
-import java.util.Map;
 
 @RestController
 @RequestMapping("/departments")
 public class EmployeeController {
-
     private final EmployeeService service;
 
     public EmployeeController(EmployeeService service) {
         this.service = service;
     }
 
+    @GetMapping
+    Collection<Employee> getAll() {
+        return service.getAll();
+    }
+
     @GetMapping("/add")
     public Employee add(@RequestParam String firstName,
                         @RequestParam String lastName,
-                        @RequestParam double salary,
-                        @RequestParam int departmentId) {
+                        @RequestParam Double salary,
+                        @RequestParam Integer departmentId) {
         return service.add(firstName, lastName, salary, departmentId);
     }
 
     @GetMapping("/find")
     public Employee find(@RequestParam String firstName,
-                         @RequestParam String lastName,
-//                         @RequestParam double salary,
-                         @RequestParam int departmentId) {
-        return service.find(firstName, lastName, departmentId);
+                         @RequestParam String lastName) {
+        return service.find(firstName, lastName);
     }
 
     @GetMapping("/remove")
     public Employee remove(@RequestParam String firstName,
-                           @RequestParam String lastName,
-//                           @RequestParam double salary,
-                           @RequestParam Integer departmentId) {
-        return service.remove(firstName, lastName,  departmentId);
-    }
-
-    @GetMapping
-    public Collection<Employee> getAll() {
-        return service.getAll();
-    }
-
-    @GetMapping("/max-salary")
-    public Employee findEmployeeWithMaxSalaryInDepartment(@RequestParam int departmentId) {
-        return service.employeeMaxSalaryInDepartment(departmentId);
+                           @RequestParam String lastName) {
+        return service.remove(firstName, lastName);
     }
 
     @GetMapping("/min-salary")
-    public Employee findEmployeeWithMinSalaryInDepartment(@RequestParam int departmentId) {
-        return service.employeeMinSalaryInDepartment(departmentId);
+    public Employee findMinSalary(@RequestParam Integer departmentId) {
+        return service.minSalary(departmentId);
     }
+
+    @GetMapping("/max-salary")
+    public Employee findMaxSalary(@RequestParam Integer departmentId) {
+        return service.maxSalary(departmentId);
+    }
+
     @GetMapping("/all")
-    public List<Employee> findAllEmployeesInAllDepartments(@RequestParam(required = false) Integer departmentId) {
-        return service.employeesInAllDepartments(departmentId);
+    public List<Employee> findSalaryInDepartment(@RequestParam(required = false) Integer departmentId) {
+        return service.salaryInDepartment(departmentId);
     }
 }
